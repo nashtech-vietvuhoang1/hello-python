@@ -5,11 +5,35 @@ description = "Learn Python"
 authors = ["Vu Hoang Viet"]
 license = "Apache License 2.0"
 readme = "README.md"
+packages = [
+    { include = "main" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
 
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+pytest-mock = "^3.14.0"
+
+
+[tool.poetry.group.dev.dependencies]
+httpx = "^0.27.0"
+pendulum = "^3.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+main = "main:main"
+
+[tool.pytest.ini_options]
+minversion = "8.2.2"
+addopts = "-ra -q"
+testpaths = [
+    "tests"
+]
+
+
