@@ -34,6 +34,7 @@ jobs:
           -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
           -Dsonar.python.coverage.reportPaths=coverage.xml
+          -Dsonar.python.xunit.reportPath=utresults.xml
           -Dsonar.sources=.
           -Dsonar.test.exclusions=tests/**,main/**,**/__init__.py,**/__pycache__/**
           -Dsonar.tests=tests/
