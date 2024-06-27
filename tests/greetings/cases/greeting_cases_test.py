@@ -1,16 +1,17 @@
-from greetings.cases import *
+from greetings.cases import greet
+from greetings.errors import NoSupportedError
 import pytest
 
 class TestGreetingCases:
   def test_greet_en(self):
-    assert greet("en", "Viet") == f"Hello, Viet!"
+    assert greet("en", "Viet") == "Hello, Viet!"
 
   def test_greet_es(self):
-    assert greet("es", "Viet") == f"Hola, Viet!"
+    assert greet("es", "Viet") == "Hola, Viet!"
 
   def test_greet_fr(self):
-    assert greet("fr", "Viet") == f"Bonjour, Viet!"
+    assert greet("fr", "Viet") == "Bonjour, Viet!"
 
   def test_greet_nosupport(self):
-    with pytest.raises(Exception):
+    with pytest.raises(NoSupportedError):
       greet("xx", "Viet")

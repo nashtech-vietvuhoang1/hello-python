@@ -1,3 +1,5 @@
+from ..errors import NoSupportedError
+
 def greet(lang: str, name: str) -> str:
   match lang:
     case "en":
@@ -7,4 +9,4 @@ def greet(lang: str, name: str) -> str:
     case "fr":
       return f"Bonjour, {name}!"
     case _:
-      raise Exception(f"language '{lang}' not supported")
+      raise NoSupportedError(lang)
