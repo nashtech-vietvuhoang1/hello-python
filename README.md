@@ -33,3 +33,10 @@ Add more language to OCP tests/greetings/ocp/greeting_ocp_test.py
     register("vi", lambda name: f"Xin Chao, {name}!")
     assert greet("vi", "Viet") == f"Xin Chao, Viet!"
 ```
+
+Generate Coverage
+
+```sh
+pytest --cov=greetings --cov-report html
+```
+
