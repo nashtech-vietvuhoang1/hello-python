@@ -1,6 +1,6 @@
 import logging
 import sys
-from greetings.ocp import *
+from greetings.ocp import greet
 
 logger = logging.getLogger(__name__)
 
