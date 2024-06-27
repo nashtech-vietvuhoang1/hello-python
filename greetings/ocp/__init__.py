@@ -1,4 +1,4 @@
-from .registry import register
+from .registry import register, greet
 
 register("en", lambda name: f"Hello, {name}!")
 register("es", lambda name: f"Hola, {name}!")
