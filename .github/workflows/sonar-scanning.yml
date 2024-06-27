@@ -22,10 +22,8 @@ jobs:
         python-version: ${{ matrix.python }}
     - name: Install tox and any other packages
       run: pip install tox
-    - name: Run tox
+    - name: Generate Unittest coverage report
       run: tox -e py
-    - name: list files
-      run: ls -la
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@v2.3.0
       env:
@@ -37,6 +35,6 @@ jobs:
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.sources=.
-          -Dsonar.test.exclusions=tests/**,main/**,**/__init__.py
+          -Dsonar.test.exclusions=tests/**,main/**,**/__init__.py,**/__pycache__/**
           -Dsonar.tests=tests/
           -Dsonar.verbose=true
