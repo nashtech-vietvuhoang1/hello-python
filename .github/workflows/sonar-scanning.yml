@@ -16,6 +16,7 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
+    - run: ls -la
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@v2.3.0
       env:
