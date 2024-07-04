@@ -1,16 +1,28 @@
 import logging
 import sys
-from greetings.ocp import greet
+from fastapi import FastAPI
+import os
+from apis.routers import ping
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-def main():
-  logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-  logger.info('Started')
+API_ID = "hello-fastapi"
+API_VERSION = "0.0.1"
+IS_LOCAL = os.environ.get("IS_LOCAL", False)
+PORT = os.environ.get("PORT", 8080)
 
-  logger.info(f"Greeting: {greet('en', 'Alice')}")
+# fastAPI Instance
+app = FastAPI(
+    title="Python FastAPI Template (API ID: "
+    + str(API_ID) + ")", docs_url="/", version=API_VERSION
+)
 
-  logger.info('Finished')
+app.include_router(ping.router)
 
-if __name__ == '__main__':
-  main()
+# needed to start the application locally for development/debugging purpose. Will never be called on K8s.
+if IS_LOCAL:
+    import uvicorn
+    if __name__ == '__main__':
+        # if run locally, the port might already be in use, just use another one then.
+        uvicorn.run(app, host='0.0.0.0', port=PORT)

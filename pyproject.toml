@@ -11,8 +11,10 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
+fastapi = "^0.111.0"
 
-
+uvicorn = "^0.30.1"
+gunicorn = "^22.0.0"
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.0"
 pytest-mock = "^3.14.0"
