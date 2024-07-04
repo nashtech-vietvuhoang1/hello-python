@@ -9,7 +9,6 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 API_ID = "hello-fastapi"
 API_VERSION = "0.0.1"
-IS_LOCAL = os.environ.get("IS_LOCAL", False)
 PORT = os.environ.get("PORT", 8080)
 
 # fastAPI Instance
@@ -20,9 +19,12 @@ app = FastAPI(
 
 app.include_router(ping.router)
 
+def main():
+  import uvicorn
+  uvicorn.run(app, host='0.0.0.0', port=PORT)
+
+
 # needed to start the application locally for development/debugging purpose. Will never be called on K8s.
-if IS_LOCAL:
-    import uvicorn
-    if __name__ == '__main__':
-        # if run locally, the port might already be in use, just use another one then.
-        uvicorn.run(app, host='0.0.0.0', port=PORT)
+if __name__ == '__main__':
+  # if run locally, the port might already be in use, just use another one then.
+  main()
