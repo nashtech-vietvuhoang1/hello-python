@@ -40,3 +40,8 @@ Generate Coverage
 pytest --cov=greetings --cov-report html
 ```
 
+Build Docker Image
+
+```sh
+docker buildx build -t hello-python:0.0.1 .
+```
