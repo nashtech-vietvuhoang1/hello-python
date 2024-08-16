@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from apis.routers import ping
-from configuration import API_ID, PORT, IS_LOCAL, API_VERSION, LOG_LEVEL
+from appconf import API_ID, PORT, IS_LOCAL, API_VERSION, LOG_LEVEL, initliazlize_logger
+
+initliazlize_logger()
 
 # fastAPI Instance
 app = FastAPI(
@@ -12,8 +14,7 @@ app.include_router(ping.router)
 
 def main():
   import uvicorn
-  uvicorn.run(app, host='0.0.0.0', port=PORT, reload=IS_LOCAL, log_level=LOG_LEVEL.lower())
-
+  uvicorn.run(app, host='0.0.0.0', port=PORT, reload=IS_LOCAL)
 
 # needed to start the application locally for development/debugging purpose. Will never be called on K8s.
 if __name__ == '__main__':

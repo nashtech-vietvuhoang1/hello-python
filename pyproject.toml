@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hello-python"
-version = "0.0.2"
+version = "0.0.3"
 description = "Learn Python"
 authors = ["Vu Hoang Viet"]
 license = "Apache License 2.0"
@@ -14,6 +14,7 @@ python = "^3.10"
 fastapi = "^0.111.0"
 uvicorn = "^0.30.1"
 
+opentelemetry-instrumentation-fastapi = "^0.46b0"
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.0"
 pytest-mock = "^3.14.0"
