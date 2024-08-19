@@ -11,7 +11,7 @@ app = FastAPI(
 )
 
 app.include_router(ping.router)
-setting_otlp(app)
+setting_otlp(app=app)
 
 def main():
   import uvicorn
