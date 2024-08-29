@@ -1,15 +1,8 @@
-import logging
-import sys
 from fastapi import FastAPI
-import os
 from apis.routers import ping
+from appconf import API_ID, PORT, IS_LOCAL, API_VERSION, initliazlize_logger, LOG_FORMAT, setting_otlp
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-
-API_ID = "hello-fastapi"
-API_VERSION = "0.0.1"
-PORT = os.environ.get("PORT", 8080)
+initliazlize_logger()
 
 # fastAPI Instance
 app = FastAPI(
@@ -18,11 +11,13 @@ app = FastAPI(
 )
 
 app.include_router(ping.router)
+setting_otlp(app=app)
 
 def main():
   import uvicorn
-  uvicorn.run(app, host='0.0.0.0', port=PORT)
-
+  log_config = uvicorn.config.LOGGING_CONFIG
+  log_config["formatters"]["access"]["fmt"] = LOG_FORMAT
+  uvicorn.run(app, host='0.0.0.0', port=PORT, reload=IS_LOCAL, log_config=log_config)
 
 # needed to start the application locally for development/debugging purpose. Will never be called on K8s.
 if __name__ == '__main__':
