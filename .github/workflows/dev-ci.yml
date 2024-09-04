@@ -45,8 +45,6 @@ jobs:
     environment: CI
     needs: docker
     steps:
-      - env:
-          tags: ${{ needs.docker.outputs.tags }}
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Deploy to Dev
@@ -59,4 +57,3 @@ jobs:
           propertyPath: Mappings.Applications.HelloPython.Version
           value: ${{ needs.docker.outputs.tags }}
           message: 'Update Image Version to ${{ needs.docker.outputs.tags }}' 
-
