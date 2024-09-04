@@ -14,6 +14,8 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     environment: CI
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Docker meta
         id: meta
@@ -38,18 +40,23 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Checkout Deployment repository
-        uses: actions/checkout@v3
+  deploy-to-environment:
+    runs-on: ubuntu-latest
+    environment: CI
+    needs: docker
+    steps:
+      - env:
+          tags: ${{ needs.docker.outputs.tags }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Deploy to Dev
+        uses: fjogeleit/yaml-update-action@main
         with:
           repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          ref: develop
-          fetch-depth: 0
-      - uses: sumup-bank/run-credo@v1
-        with:
-          repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          filepath: infra/hello-application.yaml
-          ref: develop
-          yamlpath: Mappings.Applications.HelloPython.Version
-          newvalue: ${{ steps.meta.outputs.tags }}
-          token: ${{ secrets.VVU_GITHUB_TOKEN }}
-          commitprefix: "[Deployment]"
+          file: infra/hello-application.yaml
+          branch: develop
+          targetBranch: develop
+          propertyPath: Mappings.Applications.HelloPython.Version
+          value: ${{ needs.docker.outputs.tags }}
+          message: 'Update Image Version to ${{ needs.docker.outputs.tags }}' 
+
