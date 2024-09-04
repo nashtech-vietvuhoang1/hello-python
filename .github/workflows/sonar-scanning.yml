@@ -36,6 +36,7 @@ jobs:
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=utresults.xml
           -Dsonar.sources=.
-          -Dsonar.test.exclusions=tests/**,main/**,**/__init__.py,**/__pycache__/**
+          -Dsonar.python.version=3.12
+          -Dsonar.test.exclusions=tests/**,main/**,**/__pycache__/**
           -Dsonar.tests=tests/
           -Dsonar.verbose=true
