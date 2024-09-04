@@ -51,7 +51,7 @@ jobs:
         uses: fjogeleit/yaml-update-action@main
         with:
           repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          file: infra/hello-application.yaml
+          valueFile: infra/hello-application.yaml
           branch: develop
           targetBranch: develop
           propertyPath: Mappings.Applications.HelloPython.Version
