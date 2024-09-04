@@ -1,9 +1,9 @@
-name: dev-ci
+name: release-ci
 
 on:
   push:
     branches:
-      - develop
+      - release/*
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
@@ -22,7 +22,7 @@ jobs:
           # list of Docker images to use as base name for tags
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,enable=true,priority=100,prefix=dev-,suffix=,format=short
+            type=sha,enable=true,priority=100,prefix=rls-,suffix=,format=short
    
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -38,18 +38,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Checkout Deployment repository
-        uses: actions/checkout@v3
-        with:
-          repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          ref: develop
-          fetch-depth: 0
-      - uses: sumup-bank/run-credo@v1
-        with:
-          repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          filepath: infra/hello-application.yaml
-          ref: develop
-          yamlpath: Mappings.Applications.HelloPython.Version
-          newvalue: ${{ steps.meta.outputs.tags }}
-          token: ${{ secrets.VVU_GITHUB_TOKEN }}
-          commitprefix: "[Deployment]"
