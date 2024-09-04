@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  docker:
+  builddocker:
     runs-on: ubuntu-latest
     environment: CI
     outputs:
@@ -43,22 +43,18 @@ jobs:
   deploy-to-environment:
     runs-on: ubuntu-latest
     environment: CI
-    needs: docker
+    needs: builddocker
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Update yaml and push
+        uses: rusowyler/github-action-yaml-update-and-push@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          ref: develop
-          token: ${{ secrets.VVU_GITHUB_TOKEN }}
-      - name: Deploy to Dev
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          repository: nashtech-vietvuhoang1/aws-cf-infra-template
-          valueFile: infra/hello-application.yaml
-          branch: develop
-          targetBranch: develop
-          propertyPath: Mappings.Applications.HelloPython.Version
-          value: ${{ needs.docker.outputs.tags }}
-          message: 'Update Image Version to ${{ needs.docker.outputs.tags }}' 
-          token: ${{ secrets.VVU_GITHUB_TOKEN }}
+          yq-version: "v4.20.2"
+          yaml-file: "infra/hello-application.yaml"
+          yaml-path: ".Mappings.Applications.HelloPython.Version"
+          yaml-value: ${{needs.builddocker.outputs.tags}}
+          repository-username: "nashtech-vietvuhoang1"
+          repository-name: "aws-cf-infra-template"
+          user-email: viet.vuhoang1@nashtechglobal.com
+          user-name: nashtech-vietvuhoang1
