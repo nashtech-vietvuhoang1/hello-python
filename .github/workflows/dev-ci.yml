@@ -47,6 +47,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          repository: nashtech-vietvuhoang1/aws-cf-infra-template
+          ref: develop
+          token: ${{ secrets.VVU_GITHUB_TOKEN }}
       - name: Deploy to Dev
         uses: fjogeleit/yaml-update-action@main
         with:
@@ -57,3 +61,4 @@ jobs:
           propertyPath: Mappings.Applications.HelloPython.Version
           value: ${{ needs.docker.outputs.tags }}
           message: 'Update Image Version to ${{ needs.docker.outputs.tags }}' 
+          token: ${{ secrets.VVU_GITHUB_TOKEN }}
