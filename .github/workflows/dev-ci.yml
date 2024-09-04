@@ -12,7 +12,7 @@ env:
 
 jobs:
   builddocker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest                           
     environment: CI
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
@@ -58,3 +58,6 @@ jobs:
           repository-name: "aws-cf-infra-template"
           user-email: viet.vuhoang1@nashtechglobal.com
           user-name: nashtech-vietvuhoang1
+          branch: develop
+          commit-message: "Update hello-python version to ${{needs.builddocker.outputs.tags}}"
+
