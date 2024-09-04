@@ -45,6 +45,8 @@ jobs:
     environment: CI
     needs: builddocker
     steps:
+      - name: Check version to update yaml
+        run: echo "Version to update yaml is ${{needs.builddocker.outputs.tags}}"
       - name: Update yaml and push
         uses: rusowyler/github-action-yaml-update-and-push@main
         env:
@@ -60,4 +62,3 @@ jobs:
           user-name: nashtech-vietvuhoang1
           branch: develop
           commit-message: "Update hello-python version to ${{needs.builddocker.outputs.tags}}"
-
