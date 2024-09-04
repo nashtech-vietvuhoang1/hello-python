@@ -163,3 +163,5 @@ cython_debug/
 #.idea/
 .vscode
 requirements.txt
+.scannerwork/**
+.scannerwork
