@@ -1,5 +1,4 @@
-name: dev-ci
-
+name: dev-ci-cd
 on:
   push:
     branches:
@@ -9,6 +8,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  PREFIX: dev
 
 jobs:
   builddocker:
@@ -16,7 +16,14 @@ jobs:
     environment: CI
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
+      shortsha: ${{ steps.short_sha.outputs.shortsha }}
     steps:
+      - uses: actions/checkout@v4
+      - name: Set Short SHA
+        id: short_sha
+        run: | 
+          shortsha=$(git rev-parse --short ${{ github.sha }})
+          echo "shortsha=${shortsha}">> "$GITHUB_OUTPUT"
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -24,8 +31,8 @@ jobs:
           # list of Docker images to use as base name for tags
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,enable=true,priority=100,prefix=dev-,suffix=,format=short
-   
+            type=sha,enable=true,priority=100,prefix=${{ env.PREFIX }}-,suffix=,format=short   
+      - run : echo "SHA "${{ steps.short_sha.outputs.shortsha }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to GHCR
@@ -53,12 +60,11 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.VVU_GITHUB_TOKEN }}
         with:
           yq-version: "v4.20.2"
-          yaml-file: "infra/hello-application.yaml"
-          yaml-path: ".Mappings.Applications.HelloPython.Version"
-          yaml-value: ${{needs.builddocker.outputs.tags}}
-          repository-username: "nashtech-vietvuhoang1"
-          repository-name: "aws-cf-infra-template"
-          user-email: viet.vuhoang1@nashtechglobal.com
-          user-name: nashtech-vietvuhoang1
+          yaml-file: infra/hello-application.yaml
+          yaml-path: .Mappings.Applications.HelloPython.Version
+          yaml-value: ${{ env.PREFIX }}-${{needs.builddocker.outputs.shortsha}}
+          repository-username: ${{ github.repository_owner }}
+          repository-name: aws-cf-infra-template
+          user-name: ${{ github.repository_owner }}
           branch: develop
-          commit-message: "Update hello-python version to ${{needs.builddocker.outputs.tags}}"
+          commit-message: "Update hello-python version to ${{ env.PREFIX }}-${{needs.builddocker.outputs.shortsha}}"
